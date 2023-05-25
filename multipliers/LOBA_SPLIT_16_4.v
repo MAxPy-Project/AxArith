@@ -1,5 +1,3 @@
-`include "LOBA_LOB_16.v"
-
 module LOBA_SPLIT_16_4 (X, Xh, Xl, kh, kl);
 
     input [15:0] X;
