@@ -30,11 +30,6 @@ Computer-Aided Design (ICCAD). 2015.
 
 */
 
-`include "DRUM_LOD.v"
-`include "DRUM_ENCODER.v"
-`include "DRUM_MUX.v"
-`include "DRUM_BARREL_SHIFTER.v"
-
 module DRUM6_16_u(a, b, r);
 input [15:0]a,b;
 output [31:0]r;
