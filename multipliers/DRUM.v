@@ -32,7 +32,7 @@ Computer-Aided Design (ICCAD). 2015.
 
 */
 
-module DRUM
+module DRUMs
     # (parameter k=6, parameter n=16, parameter m=16)
     (a, b, r);
 
@@ -45,7 +45,7 @@ module DRUM
     wire [n+m-1:0] r_temp;
     wire out_sign;
 
-    DRUM_dsmk_mn #(k, n, m) U1 (.a(a_temp), .b(b_temp), .r(r_temp));
+    DRUMu #(k, n, m) U1 (.a(a_temp), .b(b_temp), .r(r_temp));
 
     assign a_temp = a[n-1] ? ~a + 1 : a;
     assign b_temp = b[m-1] ? ~b + 1 : b;
@@ -54,8 +54,7 @@ module DRUM
 
 endmodule
 
-
-module DRUM_dsmk_mn
+module DRUMu
     # (parameter k_in=6, parameter n_in=16, parameter m_in=16)
     (a, b, r);
 
