@@ -155,7 +155,7 @@ endmodule
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-module LOBA2
+module LOBA3
     # (parameter k=4, parameter n=14, parameter m=8)
     (a, b, r);
 
@@ -168,7 +168,7 @@ module LOBA2
     wire [n+m-1:0] r_temp;
     wire out_sign;
 
-    LOBA2_CORE #(.K(k), .NA(n), .NB(m)) u1 (.a(a_temp), .b(b_temp), .r(r_temp));
+    LOBA3_CORE #(.K(k), .NA(n), .NB(m)) u1 (.a(a_temp), .b(b_temp), .r(r_temp));
 
     assign a_temp = a[n-1] ? ~a + 1 : a;
     assign b_temp = b[m-1] ? ~b + 1 : b;
@@ -178,7 +178,7 @@ module LOBA2
     endmodule
 
 
-module LOBA2_CORE
+module LOBA3_CORE
     #(parameter K=4, parameter NA=16, parameter NB=16)
     (a, b, r);
 
