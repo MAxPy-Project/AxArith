@@ -33,63 +33,63 @@ Computer-Aided Design (ICCAD). 2015.
 */
 
 module DRUMs
-    # (parameter k=6, parameter n=16, parameter m=16)
+    # (parameter N=16, parameter K=4)
     (a, b, r);
 
-    input [n-1:0] a;
-    input [m-1:0] b;
-    output [n+m-1:0] r;
+    input [N-1:0] a;
+    input [N-1:0] b;
+    output [2*N-1:0] r;
 
-    wire [n-1:0] a_temp;
-    wire [m-1:0] b_temp;
-    wire [n+m-1:0] r_temp;
+    wire [N-1:0] a_temp;
+    wire [N-1:0] b_temp;
+    wire [2*N-1:0] r_temp;
     wire out_sign;
 
-    DRUMu #(k, n, m) U1 (.a(a_temp), .b(b_temp), .r(r_temp));
+    DRUMu #(.N(N), .K(K)) U1 (.a(a_temp), .b(b_temp), .r(r_temp));
 
-    assign a_temp = a[n-1] ? ~a + 1 : a;
-    assign b_temp = b[m-1] ? ~b + 1 : b;
-    assign out_sign = a[n-1] ^ b[m-1];
+    assign a_temp = a[N-1] ? ~a + 1 : a;
+    assign b_temp = b[N-1] ? ~b + 1 : b;
+    assign out_sign = a[N-1] ^ b[N-1];
     assign r = out_sign ? ~ r_temp + 1 : r_temp;
 
 endmodule
 
 module DRUMu
-    # (parameter k_in=6, parameter n_in=16, parameter m_in=16)
+    # (parameter N=16, parameter K=6)
     (a, b, r);
 
-    input [n_in-1:0] a;
-    input [m_in-1:0] b;
-    output [n_in+m_in-1:0] r;
+    input [N-1:0] a;
+    input [N-1:0] b;
+    output [2*N-1:0] r;
 
-    wire [$clog2(n_in)-1:0] k1;
-    wire [$clog2(m_in)-1:0] k2;
-    wire [k_in-3:0] m;
-    wire [k_in-3:0] n;
-    wire [n_in-1:0] l1;
-    wire [m_in-1:0] l2;
-    wire [(k_in*2)-1:0] tmp;
-    wire [$clog2(m_in)-1:0] p;
-    wire [$clog2(m_in)-1:0] q;
-    wire [$clog2(m_in):0]sum;
-    wire [k_in-1:0] mm;
-    wire [k_in-1:0] nn;
+    wire [$clog2(N)-1:0] k1;
+    wire [$clog2(N)-1:0] k2;
+    wire [K-3:0] m;
+    wire [K-3:0] n;
+    wire [N-1:0] l1;
+    wire [N-1:0] l2;
+    wire [(K*2)-1:0] tmp;
+    wire [$clog2(N)-1:0] p;
+    wire [$clog2(N)-1:0] q;
+    wire [$clog2(N):0]sum;
+    wire [K-1:0] mm;
+    wire [K-1:0] nn;
 
-    DRUM_LOD_k #(n_in) u1 (.in_a(a), .out_a(l1));
-    DRUM_LOD_k #(m_in) u2 (.in_a(b), .out_a(l2));
+    DRUM_LOD_k #(.N(N)) u1 (.in_a(a), .out_a(l1));
+    DRUM_LOD_k #(.N(N)) u2 (.in_a(b), .out_a(l2));
 
-    DRUM_P_Encoder_k #(n_in) u3 (.in_a(l1), .out_a(k1));
-    DRUM_P_Encoder_k #(m_in) u4 (.in_a(l2), .out_a(k2));
+    DRUM_P_Encoder_k #(.N(N)) u3 (.in_a(l1), .out_a(k1));
+    DRUM_P_Encoder_k #(.N(N)) u4 (.in_a(l2), .out_a(k2));
 
-    DRUM_Mux_16_3_k #(k_in, n_in) u5 (.in_a(a), .select(k1), .out(n));
-    DRUM_Mux_16_3_k #(k_in, m_in) u6 (.in_a(b), .select(k2), .out(m));
+    DRUM_Mux_16_3_k #(.N(N), .K(K)) u5 (.in_a(a), .select(k1), .out(n));
+    DRUM_Mux_16_3_k #(.N(N), .K(K)) u6 (.in_a(b), .select(k2), .out(m));
 
-    DRUM_Barrel_Shifter_k_mn #(k_in, n_in, m_in) u7 (.in_a(tmp), .count(sum), .out_a(r));
+    DRUM_Barrel_Shifter_k #(.K(K), .N(N)) u7 (.in_a(tmp), .count(sum), .out_a(r));
 
-    assign p = k1 > (k_in-1) ? k1 - (k_in-1) : 0;
-    assign q = k2 > (k_in-1) ? k2 - (k_in-1) : 0;
-    assign mm = k1 > (k_in-1) ? {1'b1, n, 1'b1} : a[k_in-1:0];
-    assign nn = k2 > (k_in-1) ? {1'b1, m, 1'b1} : b[k_in-1:0];
+    assign p = k1 > (K-1) ? k1 - (K-1) : 0;
+    assign q = k2 > (K-1) ? k2 - (K-1) : 0;
+    assign mm = k1 > (K-1) ? {1'b1, n, 1'b1} : a[K-1:0];
+    assign nn = k2 > (K-1) ? {1'b1, m, 1'b1} : b[K-1:0];
     assign tmp = mm * nn;
     assign sum = p + q;
 
@@ -97,18 +97,18 @@ endmodule
 
 
 module DRUM_LOD_k
-    # (parameter n_in=16)
+    # (parameter N=16)
     (in_a, out_a);
 
-    input [n_in-1:0]in_a;
-    output reg [n_in-1:0]out_a;
+    input [N-1:0]in_a;
+    output reg [N-1:0]out_a;
     integer k,j;
-    reg [n_in-1:0]w;
+    reg [N-1:0]w;
 
     always @ (*) begin
-        out_a[n_in-1]=in_a[n_in-1];
-        w[n_in-1]=in_a[n_in-1]?0:1;
-        for (k=n_in-2;k>=0;k=k-1)
+        out_a[N-1]=in_a[N-1];
+        w[N-1]=in_a[N-1]?0:1;
+        for (k=N-2;k>=0;k=k-1)
             begin
             w[k]=in_a[k]?0:w[k+1];
             out_a[k]=w[k+1]&in_a[k];
@@ -119,51 +119,51 @@ endmodule
 
 
 module DRUM_P_Encoder_k
-    # (parameter n_in=16)
+    # (parameter N=16)
     (in_a, out_a);
 
-    input [n_in-1:0]in_a;
-    output reg [$clog2(n_in)-1:0]out_a;
+    input [N-1:0]in_a;
+    output reg [$clog2(N)-1:0]out_a;
     integer i;
 
     always @ (*) begin
         out_a = 0;
-        for (i=n_in-1; i>=0; i=i-1)
-            if (in_a[i]) out_a = i[$clog2(n_in)-1:0];
+        for (i=N-1; i>=0; i=i-1)
+            if (in_a[i]) out_a = i[$clog2(N)-1:0];
     end
 
 endmodule
 
 
-module DRUM_Barrel_Shifter_k_mn
-    # (parameter k_in=6, parameter n_in=16, parameter m_in=16)
+module DRUM_Barrel_Shifter_k
+    # (parameter N=16, parameter K=6)
     (in_a, count, out_a);
 
-    input [$clog2(m_in):0]count;
-    input [(k_in*2)-1:0]in_a;
-    output [(n_in+m_in)-1:0]out_a;
-    wire [(n_in + m_in)-1:0] tmp;
+    input [$clog2(N):0]count;
+    input [(K*2)-1:0]in_a;
+    output [2*N-1:0]out_a;
+    wire [2*N-1:0] tmp;
 
-    assign tmp = {{((n_in + m_in)-(k_in*2)){1'b0}}, in_a};
+    assign tmp = {{((2*N)-(K*2)){1'b0}}, in_a};
     assign out_a=(tmp<<count);
 
 endmodule
 
 
 module DRUM_Mux_16_3_k
-    #(parameter k_in=6, parameter n_in=16)
+    #(parameter N=16, parameter K=6)
     (in_a, select, out);
 
-    input [$clog2(n_in)-1:0]select;
-    input [n_in-1:0]in_a;
-    output reg [k_in-3:0]out;
+    input [$clog2(N)-1:0]select;
+    input [N-1:0]in_a;
+    output reg [K-3:0]out;
     integer i;
 
     always @(*) begin
         out = 0;
-        for (i = k_in;i<(n_in);i=i+1) begin :mux_gen_block
-            if (select == i[$clog2(n_in)-1:0])
-                out = in_a[i-1 -: k_in-2];
+        for (i = K;i<(N);i=i+1) begin :mux_gen_block
+            if (select == i[$clog2(N)-1:0])
+                out = in_a[i-1 -: K-2];
         end
     end
 

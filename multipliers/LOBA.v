@@ -3,48 +3,48 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 module LOBA0s
-    # (parameter k=4, parameter n=16, parameter m=16)
+    # (parameter N=16, parameter K=4)
     (a, b, r);
 
-    input [n-1:0] a;
-    input [m-1:0] b;
-    output [n+m-1:0] r;
+    input [N-1:0] a;
+    input [N-1:0] b;
+    output [2*N-1:0] r;
 
-    wire [n-1:0] a_temp;
-    wire [m-1:0] b_temp;
-    wire [n+m-1:0] r_temp;
+    wire [N-1:0] a_temp;
+    wire [N-1:0] b_temp;
+    wire [2*N-1:0] r_temp;
     wire out_sign;
 
-    LOBA0u #(.K(k), .NA(n), .NB(m)) u1 (.a(a_temp), .b(b_temp), .r(r_temp));
+    LOBA0u #(.N(N), .K(K)) u1 (.a(a_temp), .b(b_temp), .r(r_temp));
 
-    assign a_temp = a[n-1] ? ~a + 1 : a;
-    assign b_temp = b[m-1] ? ~b + 1 : b;
-    assign out_sign = a[n-1] ^ b[m-1];
+    assign a_temp = a[N-1] ? ~a + 1 : a;
+    assign b_temp = b[N-1] ? ~b + 1 : b;
+    assign out_sign = a[N-1] ^ b[N-1];
     assign r = out_sign ? ~ r_temp + 1 : r_temp;
 
-    endmodule
+endmodule
 
 
 module LOBA0u
-    #(parameter K=4, parameter NA=16, parameter NB=16)
+    # (parameter N=16, parameter K=4)
     (a, b, r);
 
-    input [NA-1:0] a;
-    input [NB-1:0] b;
-    output [NA+NB-1:0] r;
+    input [N-1:0] a;
+    input [N-1:0] b;
+    output [2*N-1:0] r;
 
     wire [K-1:0] Ah;
     wire [K-1:0] Al;
-    wire [$clog2(NA)-1:0] k1a;
-    wire [$clog2(NA)-1:0] k2a;
+    wire [$clog2(N)-1:0] k1a;
+    wire [$clog2(N)-1:0] k2a;
 
     wire [K-1:0] Bh;
     wire [K-1:0] Bl;
-    wire [$clog2(NB)-1:0] k1b;
-    wire [$clog2(NB)-1:0] k2b;
+    wire [$clog2(N)-1:0] k1b;
+    wire [$clog2(N)-1:0] k2b;
 
-    LOBA_SPLIT #(.K(K), .N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
-    LOBA_SPLIT #(.K(K), .N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
+    LOBA_SPLIT #(.N(N),.K(K)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
+    LOBA_SPLIT #(.N(N),.K(K)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
     assign r =
         ((Ah*Bh)<<(k1a+k1b-(2*(K-1))))
@@ -55,48 +55,48 @@ endmodule
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module LOBA1s
-    # (parameter k=4, parameter n=16, parameter m=16)
+    # (parameter N=16, parameter K=4)
     (a, b, r);
 
-    input [n-1:0] a;
-    input [m-1:0] b;
-    output [n+m-1:0] r;
+    input [N-1:0] a;
+    input [N-1:0] b;
+    output [2*N-1:0] r;
 
-    wire [n-1:0] a_temp;
-    wire [m-1:0] b_temp;
-    wire [n+m-1:0] r_temp;
+    wire [N-1:0] a_temp;
+    wire [N-1:0] b_temp;
+    wire [2*N-1:0] r_temp;
     wire out_sign;
 
-    LOBA1u #(.K(k), .NA(n), .NB(m)) u1 (.a(a_temp), .b(b_temp), .r(r_temp));
+    LOBA1u #(.N(N), .K(K)) u1 (.a(a_temp), .b(b_temp), .r(r_temp));
 
-    assign a_temp = a[n-1] ? ~a + 1 : a;
-    assign b_temp = b[m-1] ? ~b + 1 : b;
-    assign out_sign = a[n-1] ^ b[m-1];
+    assign a_temp = a[N-1] ? ~a + 1 : a;
+    assign b_temp = b[N-1] ? ~b + 1 : b;
+    assign out_sign = a[N-1] ^ b[N-1];
     assign r = out_sign ? ~ r_temp + 1 : r_temp;
 
-    endmodule
+endmodule
 
 
 module LOBA1u
-    #(parameter K=4, parameter NA=16, parameter NB=16)
+    # (parameter N=16, parameter K=4)
     (a, b, r);
 
-    input [NA-1:0] a;
-    input [NB-1:0] b;
-    output [NA+NB-1:0] r;
+    input [N-1:0] a;
+    input [N-1:0] b;
+    output [2*N-1:0] r;
 
     wire [K-1:0] Ah;
     wire [K-1:0] Al;
-    wire [$clog2(NA)-1:0] k1a;
-    wire [$clog2(NA)-1:0] k2a;
+    wire [$clog2(N)-1:0] k1a;
+    wire [$clog2(N)-1:0] k2a;
 
     wire [K-1:0] Bh;
     wire [K-1:0] Bl;
-    wire [$clog2(NB)-1:0] k1b;
-    wire [$clog2(NB)-1:0] k2b;
+    wire [$clog2(N)-1:0] k1b;
+    wire [$clog2(N)-1:0] k2b;
 
-    LOBA_SPLIT #(.K(K), .N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
-    LOBA_SPLIT #(.K(K), .N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
+    LOBA_SPLIT #(.N(N),.K(K)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
+    LOBA_SPLIT #(.N(N),.K(K)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
     assign r =
         ((Ah*Bh)<<(k1a+k1b-(2*(K-1))))
@@ -109,48 +109,48 @@ endmodule
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module LOBA2s
-    # (parameter k=4, parameter n=16, parameter m=16)
+    # (parameter N=16, parameter K=4)
     (a, b, r);
 
-    input [n-1:0] a;
-    input [m-1:0] b;
-    output [n+m-1:0] r;
+    input [N-1:0] a;
+    input [N-1:0] b;
+    output [2*N-1:0] r;
 
-    wire [n-1:0] a_temp;
-    wire [m-1:0] b_temp;
-    wire [n+m-1:0] r_temp;
+    wire [N-1:0] a_temp;
+    wire [N-1:0] b_temp;
+    wire [2*N-1:0] r_temp;
     wire out_sign;
 
-    LOBA2u #(.K(k), .NA(n), .NB(m)) u1 (.a(a_temp), .b(b_temp), .r(r_temp));
+    LOBA2u #(.N(N), .K(K)) u1 (.a(a_temp), .b(b_temp), .r(r_temp));
 
-    assign a_temp = a[n-1] ? ~a + 1 : a;
-    assign b_temp = b[m-1] ? ~b + 1 : b;
-    assign out_sign = a[n-1] ^ b[m-1];
+    assign a_temp = a[N-1] ? ~a + 1 : a;
+    assign b_temp = b[N-1] ? ~b + 1 : b;
+    assign out_sign = a[N-1] ^ b[N-1];
     assign r = out_sign ? ~ r_temp + 1 : r_temp;
 
-    endmodule
+endmodule
 
 
 module LOBA2u
-    #(parameter K=4, parameter NA=16, parameter NB=16)
+    # (parameter N=16, parameter K=4)
     (a, b, r);
 
-    input [NA-1:0] a;
-    input [NB-1:0] b;
-    output [NA+NB-1:0] r;
+    input [N-1:0] a;
+    input [N-1:0] b;
+    output [2*N-1:0] r;
 
     wire [K-1:0] Ah;
     wire [K-1:0] Al;
-    wire [$clog2(NA)-1:0] k1a;
-    wire [$clog2(NA)-1:0] k2a;
+    wire [$clog2(N)-1:0] k1a;
+    wire [$clog2(N)-1:0] k2a;
 
     wire [K-1:0] Bh;
     wire [K-1:0] Bl;
-    wire [$clog2(NB)-1:0] k1b;
-    wire [$clog2(NB)-1:0] k2b;
+    wire [$clog2(N)-1:0] k1b;
+    wire [$clog2(N)-1:0] k2b;
 
-    LOBA_SPLIT #(.K(K), .N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
-    LOBA_SPLIT #(.K(K), .N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
+    LOBA_SPLIT #(.N(N),.K(K)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
+    LOBA_SPLIT #(.N(N),.K(K)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
     assign r =
         ((Ah*Bh)<<(k1a+k1b-(2*(K-1))))
@@ -165,48 +165,48 @@ endmodule
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module LOBA3s
-    # (parameter k=4, parameter n=16, parameter m=16)
+    # (parameter N=16, parameter K=4)
     (a, b, r);
 
-    input [n-1:0] a;
-    input [m-1:0] b;
-    output [n+m-1:0] r;
+    input [N-1:0] a;
+    input [N-1:0] b;
+    output [2*N-1:0] r;
 
-    wire [n-1:0] a_temp;
-    wire [m-1:0] b_temp;
-    wire [n+m-1:0] r_temp;
+    wire [N-1:0] a_temp;
+    wire [N-1:0] b_temp;
+    wire [2*N-1:0] r_temp;
     wire out_sign;
 
-    LOBA3u #(.K(k), .NA(n), .NB(m)) u1 (.a(a_temp), .b(b_temp), .r(r_temp));
+    LOBA3u #(.N(N), .K(K)) u1 (.a(a_temp), .b(b_temp), .r(r_temp));
 
-    assign a_temp = a[n-1] ? ~a + 1 : a;
-    assign b_temp = b[m-1] ? ~b + 1 : b;
-    assign out_sign = a[n-1] ^ b[m-1];
+    assign a_temp = a[N-1] ? ~a + 1 : a;
+    assign b_temp = b[N-1] ? ~b + 1 : b;
+    assign out_sign = a[N-1] ^ b[N-1];
     assign r = out_sign ? ~ r_temp + 1 : r_temp;
 
-    endmodule
+endmodule
 
 
 module LOBA3u
-    #(parameter K=4, parameter NA=16, parameter NB=16)
+    # (parameter N=16, parameter K=4)
     (a, b, r);
 
-    input [NA-1:0] a;
-    input [NB-1:0] b;
-    output [NA+NB-1:0] r;
+    input [N-1:0] a;
+    input [N-1:0] b;
+    output [2*N-1:0] r;
 
     wire [K-1:0] Ah;
     wire [K-1:0] Al;
-    wire [$clog2(NA)-1:0] k1a;
-    wire [$clog2(NA)-1:0] k2a;
+    wire [$clog2(N)-1:0] k1a;
+    wire [$clog2(N)-1:0] k2a;
 
     wire [K-1:0] Bh;
     wire [K-1:0] Bl;
-    wire [$clog2(NB)-1:0] k1b;
-    wire [$clog2(NB)-1:0] k2b;
+    wire [$clog2(N)-1:0] k1b;
+    wire [$clog2(N)-1:0] k2b;
 
-    LOBA_SPLIT #(.K(K), .N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
-    LOBA_SPLIT #(.K(K), .N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
+    LOBA_SPLIT #(.N(N),.K(K)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
+    LOBA_SPLIT #(.N(N),.K(K)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
     assign r =
         ((Ah*Bh)<<(k1a+k1b-(2*(K-1))))
@@ -223,7 +223,7 @@ endmodule
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module LOBA_SPLIT
-    # (parameter K=4, parameter N=16)
+    # (parameter N=16, parameter K=4)
     (X, Xh, Xl, kh, kl);
 
     input [N-1:0] X;
@@ -239,9 +239,11 @@ module LOBA_SPLIT
 
     LOBA_LOB #(.N(N)) u1 (.x(X), .y(lobh));
     LOBA_LOB #(.N(N)) u2 (.x(lower), .y(lobl));
-    LOBA_MUX #(.k_in(K), .n_in(N)) u3 (.in_a(X), .select(kh), .out(Xh));
-    LOBA_MUX #(.k_in(K), .n_in(N)) u4 (.in_a(X), .select(kl), .out(Xl));
-    LOBA_LOWER #(.n_in(N)) u5 (.in_a(X), .select(kh-K), .out(lower));
+
+    LOBA_MUX #(.K(K), .N(N)) u3 (.in_a(X), .select(kh), .out(Xh));
+    LOBA_MUX #(.K(K), .N(N)) u4 (.in_a(X), .select(kl), .out(Xl));
+
+    LOBA_LOWER #(.N(N)) u5 (.in_a(X), .select(kh-K), .out(lower));
 
     generate
         for (i=N-1; i>=K-1; i=i-1) begin
@@ -260,19 +262,19 @@ endmodule
 
 
 module LOBA_MUX
-    #(parameter k_in=4, parameter n_in=16)
+    # (parameter N=16, parameter K=4)
     (in_a, select, out);
 
-    input [$clog2(n_in)-1:0] select;
-    input [n_in-1:0] in_a;
-    output reg [k_in-1:0] out;
+    input [$clog2(N)-1:0] select;
+    input [N-1:0] in_a;
+    output reg [K-1:0] out;
     integer i;
 
     always @ (*) begin
         out = 0;
-        for (i=k_in-1; i<(n_in); i=i+1) begin
+        for (i=K-1; i<(N); i=i+1) begin
             if (select == i) begin
-                out <= in_a[i -: k_in];
+                out <= in_a[i -: K];
             end
         end
     end
@@ -281,19 +283,18 @@ endmodule
 
 
 module LOBA_LOWER
-    #(parameter n_in=16)
+    #(parameter N=16)
     (in_a, select, out);
 
-    input [$clog2(n_in)-1:0] select;
-    input [n_in-1:0] in_a;
-    output reg [n_in-1:0] out;
+    input [$clog2(N)-1:0] select;
+    input [N-1:0] in_a;
+    output reg [N-1:0] out;
     genvar i;
 
-    for (i=n_in-1; i>=0; i=i-1) begin
+    for (i=N-1; i>=0; i=i-1) begin
         always @ (*) begin
-            //out = 0;
             if (select == i) begin
-                out[n_in-1:i] <= 0;
+                out[N-1:i] <= 0;
                 out[i:0] <= in_a[i:0];
             end
         end
