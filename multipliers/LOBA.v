@@ -43,11 +43,12 @@ module LOBA0u
     wire [$clog2(NB)-1:0] k1b;
     wire [$clog2(NB)-1:0] k2b;
 
-    LOBA_SPLIT #(.N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
-    LOBA_SPLIT #(.N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
+    LOBA_SPLIT #(.K(K), .N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
+    LOBA_SPLIT #(.K(K), .N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
-    assign r = ((Ah*Bh)<<(k1a+k1b-(2*(K-1))));
-
+    assign r =
+        ((Ah*Bh)<<(k1a+k1b-(2*(K-1))))
+        ;
 endmodule
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -94,11 +95,14 @@ module LOBA1u
     wire [$clog2(NB)-1:0] k1b;
     wire [$clog2(NB)-1:0] k2b;
 
-    LOBA_SPLIT #(.N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
-    LOBA_SPLIT #(.N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
+    LOBA_SPLIT #(.K(K), .N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
+    LOBA_SPLIT #(.K(K), .N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
-    assign r = ((Ah*Bh)<<(k1a+k1b-(2*(K-1)))) + ((Ah*Bl)<<(k1a+k2b-(2*(K-1))));
-
+    assign r =
+        ((Ah*Bh)<<(k1a+k1b-(2*(K-1))))
+        +
+        ((Ah*Bl)<<(k1a+k2b-(2*(K-1))))
+        ;
 endmodule
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -145,11 +149,16 @@ module LOBA2u
     wire [$clog2(NB)-1:0] k1b;
     wire [$clog2(NB)-1:0] k2b;
 
-    LOBA_SPLIT #(.N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
-    LOBA_SPLIT #(.N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
+    LOBA_SPLIT #(.K(K), .N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
+    LOBA_SPLIT #(.K(K), .N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
-    assign r = ((Ah*Bh)<<(k1a+k1b-(2*(K-1)))) + ((Ah*Bl)<<(k1a+k2b-(2*(K-1)))) + ((Al*Bh)<<(k2a+k1b-(2*(K-1))));
-
+    assign r =
+        ((Ah*Bh)<<(k1a+k1b-(2*(K-1))))
+        +
+        ((Ah*Bl)<<(k1a+k2b-(2*(K-1))))
+        +
+        ((Al*Bh)<<(k2a+k1b-(2*(K-1))))
+        ;
 endmodule
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -196,11 +205,18 @@ module LOBA3u
     wire [$clog2(NB)-1:0] k1b;
     wire [$clog2(NB)-1:0] k2b;
 
-    LOBA_SPLIT #(.N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
-    LOBA_SPLIT #(.N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
+    LOBA_SPLIT #(.K(K), .N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
+    LOBA_SPLIT #(.K(K), .N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
-    assign r = ((Ah*Bh)<<(k1a+k1b-(2*(K-1)))) + ((Ah*Bl)<<(k1a+k2b-(2*(K-1)))) + ((Al*Bh)<<(k2a+k1b-(2*(K-1)))) + ((Al*Bl)<<(k2a+k2b-(2*(K-1))));
-
+    assign r =
+        ((Ah*Bh)<<(k1a+k1b-(2*(K-1))))
+        +
+        ((Ah*Bl)<<(k1a+k2b-(2*(K-1))))
+        +
+        ((Al*Bh)<<(k2a+k1b-(2*(K-1))))
+        +
+        ((Al*Bl)<<(k2a+k2b-(2*(K-1))))
+        ;
 endmodule
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
