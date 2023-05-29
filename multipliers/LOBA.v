@@ -3,7 +3,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 module LOBA0s
-    # (parameter k=4, parameter n=14, parameter m=8)
+    # (parameter k=4, parameter n=16, parameter m=16)
     (a, b, r);
 
     input [n-1:0] a;
@@ -54,7 +54,7 @@ endmodule
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module LOBA1s
-    # (parameter k=4, parameter n=14, parameter m=8)
+    # (parameter k=4, parameter n=16, parameter m=16)
     (a, b, r);
 
     input [n-1:0] a;
@@ -97,7 +97,7 @@ module LOBA1u
     LOBA_SPLIT #(.N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
     LOBA_SPLIT #(.N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
-    assign r = ((Ah*Bh)<<(k1a+k1b-6)) + ((Ah*Bl)<<(k1a+k2b-6));
+    assign r = ((Ah*Bh)<<(k1a+k1b-(2*(K-1)))) + ((Ah*Bl)<<(k1a+k2b-(2*(K-1))));
 
 endmodule
 
@@ -105,7 +105,7 @@ endmodule
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module LOBA2s
-    # (parameter k=4, parameter n=14, parameter m=8)
+    # (parameter k=4, parameter n=16, parameter m=16)
     (a, b, r);
 
     input [n-1:0] a;
@@ -148,7 +148,7 @@ module LOBA2u
     LOBA_SPLIT #(.N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
     LOBA_SPLIT #(.N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
-    assign r = ((Ah*Bh)<<(k1a+k1b-6)) + ((Ah*Bl)<<(k1a+k2b-6)) + ((Al*Bh)<<(k2a+k1b-6));
+    assign r = ((Ah*Bh)<<(k1a+k1b-(2*(K-1)))) + ((Ah*Bl)<<(k1a+k2b-(2*(K-1)))) + ((Al*Bh)<<(k2a+k1b-(2*(K-1))));
 
 endmodule
 
@@ -156,7 +156,7 @@ endmodule
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module LOBA3s
-    # (parameter k=4, parameter n=14, parameter m=8)
+    # (parameter k=4, parameter n=16, parameter m=16)
     (a, b, r);
 
     input [n-1:0] a;
@@ -199,7 +199,7 @@ module LOBA3u
     LOBA_SPLIT #(.N(NA)) u1 (.X(a), .Xh(Ah), .kh(k1a), .Xl(Al), .kl(k2a));
     LOBA_SPLIT #(.N(NB)) u2 (.X(b), .Xh(Bh), .kh(k1b), .Xl(Bl), .kl(k2b));
 
-    assign r = ((Ah*Bh)<<(k1a+k1b-6)) + ((Ah*Bl)<<(k1a+k2b-6)) + ((Al*Bh)<<(k2a+k1b-6)) + ((Al*Bl)<<(k2a+k2b-6));
+    assign r = ((Ah*Bh)<<(k1a+k1b-(2*(K-1)))) + ((Ah*Bl)<<(k1a+k2b-(2*(K-1)))) + ((Al*Bh)<<(k2a+k1b-(2*(K-1)))) + ((Al*Bl)<<(k2a+k2b-(2*(K-1))));
 
 endmodule
 
