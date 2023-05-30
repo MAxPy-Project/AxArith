@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 /*
 Copyright (c) 2015 Soheil Hashemi (soheil_hashemi@brown.edu)
               2018 German Research Center for Artificial Intelligence (DFKI)
